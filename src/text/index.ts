@@ -392,6 +392,31 @@ class Text {
             }
         })
 
+        /*
+         * 为解决火狐浏览器 剪切不保留p 单独做处理
+         * 之前的 keep-p 功能只在退格 del键做了监听 没有考虑剪切的快捷键
+         * 在弹起 x 键的时候在做一遍空内容检测
+         */
+        $textElem.on('keyup', (e: KeyboardEvent) => {
+            if (e.keyCode === 88) {
+                // 删除时，保留 EMPTY_P
+                const $textElem = editor.$textElem
+                const txtHtml = $textElem.html().toLowerCase().trim()
+
+                if (!txtHtml || txtHtml === '<br>') {
+                    // 内容空了
+                    const $p = $(EMPTY_P)
+                    $textElem.html(' ') // 一定要先清空，否则在 firefox 下有问题
+                    $textElem.append($p)
+                    editor.selection.createRangeByElem($p, false, true)
+                    editor.selection.restoreSelection()
+                    // 设置折叠后的光标位置，在firebox等浏览器下
+                    // 光标设置在end位置会自动换行
+                    editor.selection.moveCursor($p.getNode(), 0)
+                }
+            }
+        })
+
         // tab up
         $textElem.on('keyup', (e: KeyboardEvent) => {
             if (e.keyCode !== 9) return
