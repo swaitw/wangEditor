@@ -11,17 +11,29 @@ about: 请大家一定要按照该模板填写，以方便我们更快复现，�
 
 *请输入内容……*
 
-## 浏览器及版本号
+## 系统和浏览器及版本号
 
-*请输入内容……*
+- 操作系统
+- 浏览器和版本
 
 ## wangEditor 版本
 
 *请输入内容……*
 
-## 官网能否复现该 bug ？
+## demo 能否复现该 bug ？
 
 能/不能
+
+- 中文 demo https://www.wangeditor.com/demo/
+- English demo https://www.wangeditor.com/demo/?lang=en
+
+## 在线 demo
+
+*请尽量提供在线 demo （推荐以下网站），帮助我们最低成本复现 bug*
+
+- https://codesandbox.io/
+- https://codepen.io/
+- https://stackblitz.com/
 
 ## 最小成本的复现步骤
 

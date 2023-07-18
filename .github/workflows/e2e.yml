@@ -13,13 +13,16 @@ on:
       - 'fix-*'
       - 'hotfix-*'
       - 'refactor-*'
+      - 'test-*'
     paths:
       - '.github/workflows/*'
-      - 'src/**'
-      - 'test/**'
-      - 'examples/**'
+      - 'packages/**'
+      - 'scripts/**'
+      - 'tests/**'
       - 'build/**'
       - 'cypress/**'
+      - 'babel.config.json'
+      - 'cypress.json'
 
 jobs:
   test-e2e:
@@ -32,11 +35,11 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: Install dependencies
-      run: npm install
-    - name: Run build
-      run: npm run build:dev   
+      run: yarn install
+    - name: Build packages
+      run: yarn build  
     - uses: cypress-io/github-action@v2
       with:
         browser: chrome
-        start: npm run example
-        wait-on: 'http://localhost:8881/examples/index.html'
+        start: yarn run example
+        wait-on: 'http://localhost:8881/examples/default-mode.html'

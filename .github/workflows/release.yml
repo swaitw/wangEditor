@@ -1,29 +1,45 @@
-name: Create release message
+name: Release
+
 on:
   push:
     tags:
-      - "v*.*.*" # 触发条件与npm-publish一致，带有版本发布的标签
+      - 'v*'
+
 jobs:
-  create:
+  release:
     runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1
+
     steps:
-      - name: Checkout code
+      - name: Checkout repo
         uses: actions/checkout@v2
-      # 生成changelog信息
-      - name: Generate changelog
-        id: changelog
-        uses: liuqh0609/changelog-generator@main
         with:
-          myToken: ${{ secrets.WFP_GITHUB_TOKEN_FOR_RELEASE }} # 这里用的是npm-publish脚本中的token
-      # 发布 Release
-      - name: Create Release # 创建Release，可以在仓库看到一个个版本
-        id: create_release
-        uses: actions/create-release@v1
+          fetch-depth: 0
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+          registry-url: https://registry.npmjs.com
+
+      - name: Install dependencies
+        run: yarn run bootstrap
+
+      - name: Build packages
+        run: yarn build
+
+      - name: Unit test
+        run: yarn run test 
+
+      - name: E2E test
+        uses: cypress-io/github-action@v2
+        with:
+          browser: chrome
+          start: yarn run example
+          wait-on: 'http://localhost:8881/examples/default-mode.html'   
+
+      - name: Publish npm
+        run: yarn run release:publish
         env:
-          GITHUB_TOKEN: ${{ secrets.WFP_GITHUB_TOKEN_FOR_RELEASE }} # 这里用的是npm-publish脚本中的token
-        with:
-          tag_name: ${{ github.ref }} # (tag)标签名称
-          release_name: ${{ github.ref }}
-          body: ${{ steps.changelog.outputs.changelog }} # 将changelog显示在body中
-          draft: false # 是否是草稿
-          prerelease: false
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

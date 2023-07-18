@@ -88,9 +88,6 @@ dist
 # https://nextjs.org/blog/next-9-1#public-directory-support
 # public
 
-# vuepress build output
-.vuepress/dist
-
 # Serverless directories
 .serverless/
 
@@ -103,14 +100,11 @@ dist
 # TernJS port file
 .tern-port
 
-examples/test-page/
-
-upload-files/
-
-upload-files-tmp/
+package-lock.json
 
 .DS_Store
 
+ISSUE.md
 ISSUE1.md
 
 .idea/
@@ -122,3 +116,11 @@ cypress/videos
 cypress/screenshots
 cypress/results
 cypress/logs
+
+packages/*/dist
+packages/*/dist-example
+
+bak/
+
+# rollup 分析包体积结果
+stats.html
